@@ -1,0 +1,70 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<nav class="navbar navbar-dark bg-dark">
+    <a class="navbar-brand"
+       href="#">
+        Navbar
+    </a>
+
+    <!-- change language dropdown -->
+    <div class="d-inline-block"
+         ngbDropdown>
+        <button class="btn btn-primary"
+                id="languageDropdown"
+                ngbDropdownToggle>
+            {{ currentLanguage.name }} ({{ currentLanguage.code }})
+        </button>
+        <div ngbDropdownMenu
+             aria-labelledby="languageDropdown">
+            <button *ngFor="let lang of languages"
+                    (click)="onLangClick(lang)"
+                    ngbDropdownItem>
+                {{ lang.name }} ({{ lang.code }})
+            </button>
+        </div>
+    </div>
+
+    <!-- <button *ngFor="let lang of languages"
+            (click)="onLangClick(lang)">
+        {{ lang.name }}
+    </button> -->
+</nav>
+
+<!-- sidenav -->
+<app-sidenav #sidenav
+             [hasBackdrop]="true">
+    <ng-container *ngTemplateOutlet="testSidenav"></ng-container>
+</app-sidenav>
+
+<router-outlet></router-outlet>
+
+<ng-container *ngTemplateOutlet="testSidenav"></ng-container>
+
+<!-- template for test sidenav -->
+<ng-template #testSidenav>
+    <div class="text-align-center margin-top">
+        <h4>
+            {{ 'common.test_sidenav' | translate }}
+        </h4>
+
+        <!-- button group -->
+        <div class="btn-group"
+             role="group"
+             aria-label="Basic example">
+            <button type="button"
+                    class="btn btn-secondary"
+                    (click)="sidenav.toggle()">
+                {{ 'common.toggle' | translate }}
+            </button>
+            <button type="button"
+                    class="btn btn-secondary"
+                    (click)="sidenav.open()">
+                {{ 'common.open' | translate }}
+            </button>
+            <button type="button"
+                    class="btn btn-secondary"
+                    (click)="sidenav.close()">
+                {{ 'common.close' | translate }}
+            </button>
+        </div>
+    </div>
+</ng-template>

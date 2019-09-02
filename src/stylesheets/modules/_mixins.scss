@@ -1,0 +1,134 @@
+@import "~stylesheets/modules/_sizes.scss";
+
+/* text setter
+ *
+ * example usage
+ * @include text(16px, 19px, 600);
+ * @include text($weight: 800, $size: 12px);
+ */
+@mixin text($size: null, $lineHeight: null, $weight: null) {
+    // If the $size argument is not empty, then output the argument
+    @if $size != null {
+        font-size: $size;
+    }
+
+    // If the $lineHeight argument is not empty, then output the argument
+    @if $lineHeight != null {
+        line-height: $lineHeight;
+    }
+
+    // If the $weight argument is not empty, then output the argument
+    @if $weight != null {
+        font-weight: $weight;
+    }
+}
+
+// size setter
+@mixin size($width, $height: $width) {
+    width: $width;
+    height: $height;
+}
+
+// media-queries (DEPRECATED)
+@mixin screen($size) {
+    @if $size == "xs" {
+        @media only screen and (min-width: map-get($grid-breakpoints, xs)) and (max-width: map-get($grid-breakpoints, sm) - 1) {
+            @content;
+        }
+    } @else if $size == "sm" {
+        @media only screen and (min-width: map-get($grid-breakpoints, sm)) and (max-width: map-get($grid-breakpoints, md) - 1) {
+            @content;
+        }
+    } @else if $size == "md" {
+        @media only screen and (min-width: map-get($grid-breakpoints, md)) and (max-width: map-get($grid-breakpoints, lg) - 1) {
+            @content;
+        }
+    } @else if $size == "lg" {
+        @media only screen and (min-width: map-get($grid-breakpoints, lg)) and (max-width: map-get($grid-breakpoints, xl) - 1) {
+            @content;
+        }
+    } @else if $size == "xl" {
+        @media only screen and (min-width: map-get($grid-breakpoints, xl)) {
+            @content;
+        }
+    } @else {
+        @media only screen and (max-width: map-get($grid-breakpoints, xs) - 1) {
+            @content;
+        }
+    }
+}
+
+/*
+ * parametrized media queries
+ */
+
+// Media of at least the minimum breakpoint width. No query for the smallest breakpoint.
+// Makes the @content apply to the given breakpoint and wider.
+@mixin media-breakpoint-up($name, $breakpoints: $grid-breakpoints) {
+    $min: breakpoint-min($name, $breakpoints);
+
+    @if $min {
+        @media (min-width: $min) {
+            @content;
+        }
+    } @else {
+        @content;
+    }
+}
+
+// Media of at most the maximum breakpoint width. No query for the largest breakpoint.
+// Makes the @content apply to the given breakpoint and narrower.
+@mixin media-breakpoint-down($name, $breakpoints: $grid-breakpoints) {
+    $max: breakpoint-max($name, $breakpoints);
+
+    @if $max {
+        @media (max-width: $max) {
+            @content;
+        }
+    } @else {
+        @content;
+    }
+}
+
+// Media that spans multiple breakpoint widths.
+// Makes the @content apply between the min and max breakpoints
+@mixin media-breakpoint-between($lower, $upper, $breakpoints: $grid-breakpoints) {
+    $min: breakpoint-min($lower, $breakpoints);
+    $max: breakpoint-max($upper, $breakpoints);
+
+    @if $min !=null and $max !=null {
+        @media (min-width: $min) and (max-width: $max) {
+            @content;
+        }
+    } @else if $max==null {
+        @include media-breakpoint-up($lower, $breakpoints) {
+            @content;
+        }
+    } @else if $min==null {
+        @include media-breakpoint-down($upper, $breakpoints) {
+            @content;
+        }
+    }
+}
+
+// Media between the breakpoint's minimum and maximum widths.
+// No minimum for the smallest breakpoint, and no maximum for the largest one.
+// Makes the @content apply only to the given breakpoint, not viewports any wider or narrower.
+@mixin media-breakpoint-only($name, $breakpoints: $grid-breakpoints) {
+    $min: breakpoint-min($name, $breakpoints);
+    $max: breakpoint-max($name, $breakpoints);
+
+    @if $min !=null and $max !=null {
+        @media (min-width: $min) and (max-width: $max) {
+            @content;
+        }
+    } @else if $max==null {
+        @include media-breakpoint-up($name, $breakpoints) {
+            @content;
+        }
+    } @else if $min==null {
+        @include media-breakpoint-down($name, $breakpoints) {
+            @content;
+        }
+    }
+}

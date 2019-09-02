@@ -1,0 +1,43 @@
+// basics
+$white: #ffffff;
+$black: #000000;
+$blackish: #333333;
+
+// blues
+$blue: #006dff;
+
+// purples
+$purple: #a62bb4;
+
+// yellows
+$yellow: #f0a21d;
+
+// darks
+$darkgray: #262626;
+
+// colors of the year
+$year-color: (
+    2019-living-coral: #ff6f61,
+    2018-ultra-violet: #6b5b95,
+    2017-greenery: #88b04b,
+    2016-serenity: #92a8d1,
+    2015-marsala: #955251,
+    2014-radiand-orchid: #b565a7,
+    2013-emerald: #009b77,
+    2012-tangerine-tango: #dd4124,
+    2011-honeysucle: #d65076,
+    2010-turquoise: #45b8ac
+) !default;
+
+// colors assigned to screen sizes
+$responsive-colors: (
+    min: map-get($year-color, 2010-turquoise),
+    xs: map-get($year-color, 2019-living-coral),
+    sm: map-get($year-color, 2018-ultra-violet),
+    md: map-get($year-color, 2017-greenery),
+    lg: map-get($year-color, 2016-serenity),
+    xl: map-get($year-color, 2011-honeysucle)
+);
+
+// shadows
+$backdrop: rgba(0, 0, 0, 0.6);

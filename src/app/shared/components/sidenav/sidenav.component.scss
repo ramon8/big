@@ -1,0 +1,23 @@
+@import "~stylesheets/modules/_all.scss";
+
+@mixin setCommon() {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+}
+
+:host {
+    position: fixed;
+    width: $sidenav-width;
+    background-color: $white;
+    @include setCommon();
+
+    .backdrop {
+        position: absolute;
+        background-color: $backdrop;
+        width: calc(100vw - #{$sidenav-width});
+        left: calc(#{$sidenav-width} - 100vw);
+        @include setCommon();
+    }
+}

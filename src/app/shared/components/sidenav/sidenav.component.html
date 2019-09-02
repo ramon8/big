@@ -1,0 +1,13 @@
+<div class="sidenav-content">
+
+    <!-- backdrop -->
+    <div class="backdrop"
+         *ngIf="hasBackdrop"
+         (click)="toggle()"
+         [style.display]="showBackdrop ? 'block' : 'none'"
+         #backdrop>
+    </div>
+
+    <!-- content -->
+    <ng-content></ng-content>
+</div>

@@ -1,0 +1,95 @@
+.spacer {
+    flex: 1 1 auto;
+}
+
+.flex-align {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.no-margin {
+    margin: 0;
+}
+
+.full-margin {
+    margin: 20px 20px;
+}
+
+.margin-top {
+    margin-top: 20px;
+}
+
+.margin-right {
+    margin-right: 20px;
+}
+
+.margin-bottom {
+    margin-bottom: 20px;
+}
+
+.margin-left {
+    margin-left: 20px;
+}
+
+.full-padding {
+    padding: 20px 20px;
+}
+
+.padding-top {
+    padding-top: 20px;
+}
+
+.padding-right {
+    padding-right: 20px;
+}
+
+.padding-bottom {
+    padding-bottom: 20px;
+}
+
+.padding-left {
+    padding-left: 20px;
+}
+
+.no-padding {
+    padding: 0;
+}
+
+.text-decoration-none {
+    text-decoration: none;
+}
+
+.text-align-center {
+    text-align: center;
+}
+
+/*
+ * Line clamps are part of the CSS Overflow Module Level 3 which is currently
+ * in Editor's Draft and totally unsupported at the moment.
+ */
+.line-clamp {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    &.clamp-1 {
+        -webkit-line-clamp: 1;
+    }
+    &.clamp-2 {
+        -webkit-line-clamp: 2;
+    }
+    &.clamp-3 {
+        -webkit-line-clamp: 3;
+    }
+    &.clamp-4 {
+        -webkit-line-clamp: 4;
+    }
+    &.clamp-5 {
+        -webkit-line-clamp: 5;
+    }
+}

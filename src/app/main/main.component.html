@@ -1,0 +1,54 @@
+<!-- example header with old media queries -->
+<div class="media-example flex-align">
+    <h3>
+        {{ 'common.header' | translate }}
+    </h3>
+</div>
+
+<!-- example header with new media queries -->
+
+<div class="media-example-2 flex-align">
+    <h3>
+        {{ 'common.vw_size' | translate:{value: vwSize} }}
+    </h3>
+</div>
+
+<div class="text-align-center">
+    <h1>
+        {{ 'common.title' | translate }}
+    </h1>
+    <img width="300"
+         alt="Jedi Logo"
+         src="assets/images/Jedi_Order.svg"
+         class="margin-top margin-bottom">
+    <!-- <img width="300"
+         alt="Angular Logo"
+         src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg=="> -->
+</div>
+
+<h3 class="text-align-center">{{ 'common.bootstrap-grid' | translate }}</h3>
+<div class="container">
+    <div class="row">
+        <div class="col flex-align">
+            col-min
+        </div>
+        <div class="col-sm flex-align">
+            col-sm
+        </div>
+        <div class="col-md flex-align">
+            col-md
+        </div>
+        <div class="col-lg flex-align">
+            col-lg
+        </div>
+        <div class="col-xl flex-align">
+            col-xl
+        </div>
+    </div>
+    <div class="row browser-specific">
+        <p class="col flex-align"
+           data-text="">
+            {{ 'common.browser_detected' | translate }}&nbsp;
+        </p>
+    </div>
+</div>
