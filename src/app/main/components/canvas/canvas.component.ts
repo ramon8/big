@@ -17,31 +17,10 @@ export class CanvasComponent implements OnInit {
     constructor(private mainService: MainService, private renderer: Renderer2) { }
 
     ngOnInit(): void {
-        this.mainService.tool.subscribe(
-            data => {
-                this.tool = data;
-            }
-        );
-        this.mainService.canvas = this.canvas;
         this.mainService.renderer = this.renderer;
-        this.mainService.canvasCotnainer = this.canvasContainer;
-        this.renderer.listen(this.mainService.canvas.nativeElement, 'mousedown', (mouseEvent: MouseEvent) => {
-            this.mainService.handleClick(this.tool, mouseEvent);
-        });
-
-        this.renderer.listen(this.mainService.canvasCotnainer.nativeElement, 'mousemove', (mouseEvent: MouseEvent) => {
-            this.mainService.handleMouseMove(this.tool, mouseEvent);
-        });
-
-        this.renderer.listen(this.mainService.canvas.nativeElement, 'mouseup', () => {
-            console.log('up');
-            this.mainService.mouseIsDown = false;
-        });
-
-    }
-
-    createRect(pointStart: any, pointMoved: any): void {
-
+        this.mainService.tool.subscribe(data => this.tool = data);
+        this.mainService.canvas = this.canvas.nativeElement;
+        this.mainService.addListeners();
     }
 
 }
