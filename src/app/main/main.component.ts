@@ -16,7 +16,6 @@ export class MainComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        // set vwSize
         this.onResize();
     }
 
