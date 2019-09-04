@@ -1,0 +1,21 @@
+.container-canvas {
+    height: 100%;
+    width: calc(100% - 3rem - 15rem - 20rem);
+    background-color: rgb(200, 200, 200);
+    float: left;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .canvas {
+        width: 30rem;
+        height: 30rem;
+        background-color: white;
+        border-radius: 2px;
+        box-shadow: 1px 1px 5px 1px #0000007d;
+        position: relative;
+
+        &.rectangle {
+            cursor: crosshair;
+        }
+    }
+}
