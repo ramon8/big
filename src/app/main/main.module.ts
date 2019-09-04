@@ -8,6 +8,7 @@ import { ToolBarComponent } from './components/tool-bar/tool-bar.component';
 import { LayerComponent } from './components/layer/layer.component';
 import { ShapeInfoComponent } from './components/shape-info/shape-info.component';
 import { CanvasComponent } from './components/canvas/canvas.component';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { CanvasComponent } from './components/canvas/canvas.component';
     imports: [
         CommonModule,
         MainRoutingModule,
-        SharedModule
+        SharedModule,
+        FormsModule
     ]
 })
 export class MainModule { }

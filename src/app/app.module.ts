@@ -10,6 +10,7 @@ import { CoreModule } from './core/core.module';
 // components
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
     declarations: [
@@ -21,7 +22,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
         AppRoutingModule,
         SharedModule,
         CoreModule,
-        BrowserAnimationsModule,
+        BrowserAnimationsModule
     ],
     providers: [],
     bootstrap: [AppComponent]

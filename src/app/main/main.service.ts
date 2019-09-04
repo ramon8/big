@@ -9,42 +9,44 @@ import { Point } from '@app/_models/point.model';
 })
 export class MainService {
 
-    //The selected tool
+    // The selected tool
     tool: BehaviorSubject<Tool>;
 
-    //Contains if the mouse is pressed or not
+    // Contains if the mouse is pressed or not
     mouseIsDown: boolean;
 
-    //All the shapes of the draw ready to be exported as background-image
+    // All the shapes of the draw ready to be exported as background-image
     drawShapes: Shape[];
 
-    //All the shapes of showed on the canvas
+    // All the shapes of showed on the canvas
     canvasShapes: Shape[];
 
-    //The shapes count
+    // The shapes count
     shapesCount: number = 0;
 
-    //The canvas of the editor
+    // The canvas of the editor
     canvas: HTMLCanvasElement;
 
-    //The HTML element that contains the canvas
+    // The HTML element that contains the canvas
     canvasCotnainer: ElementRef;
 
-    //The renderer2 service from angular
+    // The renderer2 service from angular
     renderer: Renderer2;
 
-    //the context of the canvas
+    // the context of the canvas
     ctx: CanvasRenderingContext2D;
 
-    //The shape id that its selected
+    // The shape id that its selected
     currentShape: number;
 
     constructor() {
-        //initialize the tool behaivorSubject
+        // initialize the tool behaivorSubject
         this.tool = new BehaviorSubject<Tool>('none');
-        //initialize the canvasShapes
-        this.canvasShapes = [];
-        //at the start of the app mouse is always up
+        // initialize the canvasShapes
+        this.canvasShapes = [
+            new Shape('rectangle', { x: 20, y: 20 }, { x: 20, y: 20 }, { x: 30, y: 50 }, false, 'blue', true, 1000, true)
+        ];
+        // at the start of the app mouse is always up
         this.mouseIsDown = false;
     }
 
@@ -155,6 +157,15 @@ export class MainService {
     }
 
     /**
+     * TODO properly coment
+     */
+    selectShapeById(id: number): void {
+        // search in every shape to find the one that with id
+        let shape: Shape = this.canvasShapes.find(shp => shp.id === id);
+        shape.selected = true;
+    }
+
+    /**
      * Handle when the user move the mouse with the rectangle tool over the canvas
      * @param mouseEvent The mousemove event
      */
@@ -224,21 +235,20 @@ export class MainService {
             ctx.strokeStyle = 'green';
             // if the shape is finished
             if (shape.finished) {
-                // if the shape is selected
-                if (shape.selected) {
-                    // draw the shape in selected mode
-                    this.drawSelected(shape, 3);
-                }
-                ctx.fillStyle = shape.color;
-                ctx.fillRect(shape.position.x, shape.position.y, shape.dimension.x, shape.dimension.y);
-                if (shape.selected) {
-                    this.drawSelectionPoint(ctx, shape);
+                if (!shape.hidde) {
+                    // if the shape is selected
+                    ctx.fillStyle = shape.color;
+                    ctx.fillRect(shape.position.x, shape.position.y, shape.dimension.x, shape.dimension.y);
+                    if (shape.selected) {
+                        this.drawSelectionPoint(ctx, shape);
+                    }
                 }
             } else {
                 ctx.strokeRect(shape.position.x, shape.position.y, shape.dimension.x, shape.dimension.y);
             }
             // ctx.fillStyle = shape.color;
         });
+        this.drawSelected(this.canvasShapes.find(shp => shp.selected && !shp.hidde), 3);
     }
 
     /**
@@ -247,13 +257,11 @@ export class MainService {
      * @param thickness the border size
      */
     drawSelected(shape: Shape, border: number = 1): void {
-        this.ctx.fillStyle = 'green';
-        this.ctx.fillRect(
-            shape.position.x - (border),
-            shape.position.y - (border),
-            shape.dimension.x + (border * 2),
-            shape.dimension.y + (border * 2)
-        );
+        if (shape) {
+            this.ctx.fillStyle = 'green';
+            this.ctx.lineWidth = 2;
+            this.ctx.strokeRect(shape.position.x, shape.position.y, shape.dimension.x, shape.dimension.y);
+        }
     }
 
     /**

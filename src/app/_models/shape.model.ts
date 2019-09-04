@@ -10,7 +10,8 @@ export class Shape {
         public selected: boolean = true,
         public color: string = 'red',
         public finished: boolean = false,
-        public id: number = null
+        public id: number = null,
+        public hidde: boolean = false,
     ) { }
 
     setDimensions(mousePosition: Point): void {

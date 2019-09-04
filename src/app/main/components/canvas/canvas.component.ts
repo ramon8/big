@@ -35,6 +35,7 @@ export class CanvasComponent implements OnInit {
 
         // added all listeners of the canvas from the mainService
         this.mainService.addListeners();
+        this.mainService.renderCanvas();
     }
 
 }

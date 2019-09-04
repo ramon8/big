@@ -1,3 +1,9 @@
 <div class="container-layer">
-
-</div>
+    <div *ngFor="let shape of shapes">
+        <div>
+            <input [ngModel]="shape.id" />
+            <input type="button" [value]="shape.hidde?'show':'hidde'" (click)="handleClick(shape)">
+            <input type="button" value="up" (click)="changeLayerOrder('up', shape.id)">
+            <input type="button" value="down" (click)="changeLayerOrder('down', shape.id)">
+        </div>
+    </div>
