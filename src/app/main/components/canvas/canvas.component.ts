@@ -32,6 +32,7 @@ export class CanvasComponent implements OnInit {
 
         // pass the canvas to the mainService
         this.mainService.canvas = this.canvas.nativeElement;
+        this.mainService.canvasContainer = this.canvasContainer.nativeElement;
 
         // added all listeners of the canvas from the mainService
         this.mainService.addListeners();

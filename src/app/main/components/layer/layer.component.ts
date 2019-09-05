@@ -27,12 +27,14 @@ export class LayerComponent implements OnInit {
     changeLayerOrder(direction: string, shapeId: number): void {
         const index: number = this.shapes.findIndex(shp => shp.id === shapeId);
         const shape: Shape = this.shapes.find(shp => shp.id === shapeId);
-        this.shapes.splice(index, 1);
-        if (direction === 'up') {
-            this.shapes.splice(index - 1, 0, shape);
-        } else {
+        if (direction === 'up' && index < this.shapes.length) {
+            this.shapes.splice(index, 1);
             this.shapes.splice(index + 1, 0, shape);
-
+        } else if (direction === 'down' && index > 0) {
+            this.shapes.splice(index, 1);
+            this.shapes.splice(index - 1, 0, shape);
+        } else if (direction === 'delete') {
+            this.shapes.splice(index, 1);
         }
         this.mainService.unselectShapes();
         shape.selected = true;

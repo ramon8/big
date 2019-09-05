@@ -28,7 +28,7 @@ export class MainService {
     canvas: HTMLCanvasElement;
 
     // The HTML element that contains the canvas
-    canvasCotnainer: ElementRef;
+    canvasContainer: ElementRef;
 
     // The renderer2 service from angular
     renderer: Renderer2;
@@ -44,7 +44,7 @@ export class MainService {
         this.tool = new BehaviorSubject<Tool>('none');
         // initialize the canvasShapes
         this.canvasShapes = [
-            new Shape('rectangle', { x: 20, y: 20 }, { x: 20, y: 20 }, { x: 30, y: 50 }, false, 'blue', true, 1000, true)
+            new Shape('rectangle', { x: 20, y: 20 }, { x: 20, y: 20 }, { x: 100, y: 100 }, false, 'blue', true, 1000, false)
         ];
         // at the start of the app mouse is always up
         this.mouseIsDown = false;
@@ -56,12 +56,19 @@ export class MainService {
      * @param mouseEvent The mousedown event
      */
     handleClick(tool: Tool, mouseEvent: MouseEvent): void {
+        this.mouseIsDown = true;
         switch (tool) {
             case 'rectangle':
                 this.handleRectangleClick(mouseEvent);
                 break;
             case 'none':
                 this.handleNoneClick(mouseEvent);
+                break;
+            case 'move':
+                this.handleMoveClick(mouseEvent);
+                break;
+            case 'se-resize':
+                this.handleResizeTopLeftClick(mouseEvent);
                 break;
             default: break;
         }
@@ -82,6 +89,21 @@ export class MainService {
             case 'none':
                 this.handleNoneMove(mouseEvent);
                 break;
+            case 'move':
+                this.handleMoveMove(mouseEvent);
+                break;
+            case 'se-resize':
+                this.handleResizeTopLeftMove(mouseEvent);
+                break;
+            case 'sw-resize':
+                this.handleResizeTopRightMove(mouseEvent);
+                break;
+            case 'nwse-resize':
+                this.handleResizeDownRightMove(mouseEvent);
+                break;
+            case 'nesw-resize':
+                this.handleResizeDownLeftMove(mouseEvent);
+                break;
             default: break;
         }
         this.renderCanvas();
@@ -101,9 +123,178 @@ export class MainService {
             case 'none':
                 this.handleNoneUp(mouseEvent);
                 break;
+            case 'move':
+                this.handleMoveUp(mouseEvent);
+                break;
+            case 'se-resize':
+                this.handleResizeTopLeftUp(mouseEvent);
+                break;
             default: break;
         }
         this.renderCanvas();
+    }
+
+    handleResizeTopLeftUp(mouseEvent: MouseEvent): void { }
+
+    handleResizeTopLeftMove(mouseEvent: MouseEvent): void {
+        const currentShape: Shape = this.findShapeById(this.currentShape);
+        const position: Point = new Point(mouseEvent.offsetX, mouseEvent.offsetY);
+        if (this.checkIfResizeTopLeft(position, currentShape)) {
+            this.tool.next('se-resize');
+        } else {
+            const shape = this.findShapeOnPoint(position);
+            if (shape && currentShape.id === shape.id) {
+                this.tool.next('move');
+            } else {
+                this.tool.next('none');
+            }
+        }
+    }
+
+    handleResizeTopRightMove(mouseEvent: MouseEvent): void {
+        const currentShape: Shape = this.findShapeById(this.currentShape);
+        const position: Point = new Point(mouseEvent.offsetX, mouseEvent.offsetY);
+        if (this.checkIfResizeTopRight(position, currentShape)) {
+            this.tool.next('sw-resize');
+        } else if (!this.mouseIsDown) {
+            const shape = this.findShapeOnPoint(position);
+            if (shape && currentShape.id === shape.id) {
+                this.tool.next('move');
+            } else {
+                this.tool.next('none');
+            }
+        } else {
+            this.canvasShapes.find(shp => shp.id === this.currentShape).setDimensions(position);
+        }
+    }
+
+    handleResizeDownRightMove(mouseEvent: MouseEvent): void {
+        const currentShape: Shape = this.findShapeById(this.currentShape);
+        const position: Point = new Point(mouseEvent.offsetX, mouseEvent.offsetY);
+        if (this.checkIfResizeDownRight(position, currentShape)) {
+            this.tool.next('nwse-resize');
+        } else if (!this.mouseIsDown) {
+            const shape = this.findShapeOnPoint(position);
+            if (shape && currentShape.id === shape.id) {
+                this.tool.next('move');
+            } else {
+                this.tool.next('none');
+            }
+        } else {
+            this.canvasShapes.find(shp => shp.id === this.currentShape).setDimensions(position);
+        }
+    }
+
+    handleResizeDownLeftMove(mouseEvent: MouseEvent): void {
+        const currentShape: Shape = this.findShapeById(this.currentShape);
+        const position: Point = new Point(mouseEvent.offsetX, mouseEvent.offsetY);
+        if (this.checkIfResizeDownLeft(position, currentShape)) {
+            this.tool.next('nesw-resize');
+        } else {
+            const shape = this.findShapeOnPoint(position);
+            if (shape && currentShape.id === shape.id) {
+                this.tool.next('move');
+            } else {
+                this.tool.next('none');
+            }
+        }
+    }
+
+    handleResizeTopLeftClick(mouseEvent: MouseEvent): void { }
+
+    handleMoveUp(mouseEvent: MouseEvent): void {
+
+    }
+
+    handleMoveClick(mouseEvent: MouseEvent): void {
+
+    }
+
+    handleMoveMove(mouseEvent: MouseEvent): void {
+        const position: Point = new Point(mouseEvent.offsetX, mouseEvent.offsetY);
+        const shape = this.findShapeOnPoint(position);
+        if (!shape || !shape.selected) {
+            this.setDirectionResize(position);
+        }
+        if (this.mouseIsDown) {
+            shape.position.x = position.x - shape.dimension.x / 2;
+            shape.position.y = position.y - shape.dimension.y / 2;
+        }
+    }
+
+    handleNoneMove(mouseEvent: MouseEvent): void {
+        const position: Point = new Point(mouseEvent.offsetX, mouseEvent.offsetY);
+        const shape: Shape = this.findShapeOnPoint(position);
+        if (shape && shape.selected) {
+            this.tool.next('move');
+        } else {
+            this.setDirectionResize(position);
+        }
+    }
+
+    setDirectionResize(position: Point): void {
+        const currentShape = this.findShapeById(this.currentShape);
+        if (this.checkIfResizeTopLeft(position, currentShape)) {
+            this.tool.next('se-resize');
+        } else if (this.checkIfResizeTopRight(position, currentShape)) {
+            this.tool.next('sw-resize');
+        } else if (this.checkIfResizeDownRight(position, currentShape)) {
+            this.tool.next('nwse-resize');
+        } else if (this.checkIfResizeDownLeft(position, currentShape)) {
+            this.tool.next('nesw-resize');
+        } else {
+            this.tool.next('none');
+        }
+    }
+
+    /**
+     *  TODO: properly commentary
+     */
+    checkIfResizeTopLeft(position: Point, currentShape: Shape): boolean {
+        return (
+            currentShape &&
+            currentShape.position.x - 5 < position.x &&
+            currentShape.position.y - 5 < position.y &&
+            currentShape.position.x + 5 > position.x &&
+            currentShape.position.y + 5 > position.y
+        );
+    }
+
+    /**
+     *  TODO: properly commentary
+     */
+    checkIfResizeTopRight(position: Point, currentShape: Shape): boolean {
+        return (
+            currentShape &&
+            currentShape.position.x + currentShape.dimension.x - 5 < position.x &&
+            currentShape.position.y - 5 < position.y &&
+            currentShape.position.x + currentShape.dimension.x + 5 > position.x &&
+            currentShape.position.y + 5 > position.y
+        );
+    }
+    /**
+     *  TODO: properly commentary
+     */
+    checkIfResizeDownRight(position: Point, currentShape: Shape): boolean {
+        return (
+            currentShape &&
+            currentShape.position.x + currentShape.dimension.x - 5 < position.x &&
+            currentShape.position.y + currentShape.dimension.y - 5 < position.y &&
+            currentShape.position.x + currentShape.dimension.x + 5 > position.x &&
+            currentShape.position.y + currentShape.dimension.y + 5 > position.y
+        );
+    }
+    /**
+     *  TODO: properly commentary
+     */
+    checkIfResizeDownLeft(position: Point, currentShape: Shape): boolean {
+        return (
+            currentShape &&
+            currentShape.position.x - 5 < position.x &&
+            currentShape.position.y + currentShape.dimension.y - 5 < position.y &&
+            currentShape.position.x + 5 > position.x &&
+            currentShape.position.y + currentShape.dimension.y + 5 > position.y
+        );
     }
 
 
@@ -120,6 +311,7 @@ export class MainService {
         shape.finished = true;
         // set the current shape to selected
         shape.selected = true;
+        this.tool.next('none');
     }
 
     handleNoneUp(mouseEvent: MouseEvent): void {
@@ -131,8 +323,6 @@ export class MainService {
      * @param mouseEvent The mousemove event
      */
     handleRectangleClick(mouseEvent: MouseEvent): void {
-        // the mouse now is down
-        this.mouseIsDown = true;
         // initialize create a new shape
         const shape: Shape = new Shape();
         // set the position of the shape using the position of the mouse
@@ -153,16 +343,17 @@ export class MainService {
     handleNoneClick(mouseEvent: MouseEvent): void {
         this.unselectShapes();
         const shape = this.findShapeOnPoint(new Point(mouseEvent.offsetX, mouseEvent.offsetY));
+        this.currentShape = shape ? shape.id : null;
         if (shape) { shape.selected = true; }
     }
 
     /**
      * TODO properly coment
      */
-    selectShapeById(id: number): void {
+    findShapeById(id: number): Shape {
         // search in every shape to find the one that with id
-        let shape: Shape = this.canvasShapes.find(shp => shp.id === id);
-        shape.selected = true;
+        const shape: Shape = this.canvasShapes.find(shp => shp.id === id);
+        return shape;
     }
 
     /**
@@ -176,11 +367,6 @@ export class MainService {
             // get the last shape added to the shapes container and the set the dimensions
             this.canvasShapes.find(shp => shp.id === this.currentShape).setDimensions(position);
         }
-    }
-
-
-    handleNoneMove(mouseEvent: MouseEvent): void {
-
     }
 
     /**
@@ -269,20 +455,20 @@ export class MainService {
      */
     drawSelectionPoint(ctx: CanvasRenderingContext2D, shape: Shape): void {
         ctx.fillStyle = 'green';
-        // ctx.beginPath();
-        // ctx.arc(shape.position.x, shape.position.y, 5, 0, 2 * Math.PI);
-        // ctx.fill();
-        // ctx.stroke();
-        // ctx.beginPath();
-        // ctx.arc(shape.position.x, shape.position.y + shape.dimension.y, 5, 0, 2 * Math.PI);
-        // ctx.fill();
-        // ctx.stroke();
-        // ctx.beginPath();
-        // ctx.arc(shape.position.x + shape.dimension.x, shape.position.y, 5, 0, 2 * Math.PI);
-        // ctx.fill();
-        // ctx.stroke();
-        // ctx.beginPath();
-        // ctx.arc(shape.position.x + shape.dimension.x, shape.position.y + shape.dimension.y, 5, 0, 2 * Math.PI);
+        ctx.beginPath();
+        ctx.arc(shape.position.x, shape.position.y, 5, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(shape.position.x, shape.position.y + shape.dimension.y, 5, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(shape.position.x + shape.dimension.x, shape.position.y, 5, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(shape.position.x + shape.dimension.x, shape.position.y + shape.dimension.y, 5, 0, 2 * Math.PI);
         ctx.fill();
         ctx.stroke();
     }
@@ -293,7 +479,7 @@ export class MainService {
         this.renderer.listen(this.canvas, 'mousedown', (e) => {
             this.handleClick(this.tool.getValue(), e);
         });
-        this.renderer.listen(this.canvas, 'mousemove', (e) => {
+        this.renderer.listen(this.canvasContainer, 'mousemove', (e) => {
             this.handleMouseMove(this.tool.getValue(), e);
         });
         this.renderer.listen(this.canvas, 'mouseup', (e) => {

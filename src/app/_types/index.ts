@@ -1,1 +1,1 @@
-export type Tool = 'rectangle' | 'none';
+export type Tool = 'rectangle' | 'move' | 'se-resize' | 'sw-resize' | 'nwse-resize' | 'nesw-resize' | 'none';

@@ -39,27 +39,5 @@ export class Shape {
             };
             this.position = mousePosition;
         }
-        // } else if (this.initialPosition.x > mousePosition.x && this.initialPosition.y > mousePosition.y) {
-        //     this.dimension = {
-        //         x: mousePosition.x + this.initialPosition.x,
-        //         y: mousePosition.y + this.initialPosition.y
-        //     };
-        //     this.position = {
-        //         x: mousePosition.x,
-        //         y: mousePosition.y
-        //     };
-        // } else if (this.initialPosition.x > mousePosition.x && this.initialPosition.y < mousePosition.y) {
-        //     this.dimension = {
-        //         x: mousePosition.x + this.initialPosition.x,
-        //         y: mousePosition.y - this.initialPosition.y
-        //     };
-        //     this.position.x = mousePosition.x;
-        // } else {
-        //     this.dimension = {
-        //         x: mousePosition.x - this.initialPosition.x,
-        //         y: mousePosition.y + this.initialPosition.y
-        //     };
-        //     this.position.y = mousePosition.y;
-        // }
     }
 }

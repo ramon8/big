@@ -1,6 +1,11 @@
-.container-layer {
+.container-component {
     width: 15rem;
     height: 100%;
     background-color: rgb(23, 23, 23);
     float: right;
+
+    .container-layers {
+        display: flex;
+        flex-direction: column-reverse;
+    }
 }
