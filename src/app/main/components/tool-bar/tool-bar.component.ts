@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MainService } from '@app/main/main.service';
+import { MainService } from '@app/_services/main.service';
 
 @Component({
     selector: 'app-tool-bar',
@@ -12,15 +12,5 @@ export class ToolBarComponent implements OnInit {
         private mainService: MainService
     ) { }
 
-    ngOnInit() {
-    }
-
-    clickRectangleBtn(): void {
-        this.mainService.tool.next('rectangle');
-    }
-
-    clickfingerBtn(): void {
-        this.mainService.tool.next('none');
-    }
-
+    ngOnInit() { }
 }
